@@ -21,10 +21,10 @@ class Character{
     void Jump(int jumpVal);
     void Reset(int windowWidth, int windowHeight);
 
-    AnimData getAnimData() const {return scarfyData};
-    Vector2 getPos() const {return scarfyData.pos};
+    AnimData getAnimData() const {return scarfyData;}
+    Vector2 getPos() const {return scarfyData.pos;}
     Rectangle getCollisionRec() const;
-    bool IsinGround(int windowHeight) const;
+    bool IsOnGround(int windowHeight) const;
 
     private:
     Texture2D scarfy;

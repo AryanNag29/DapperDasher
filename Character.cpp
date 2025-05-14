@@ -8,8 +8,8 @@ Character::Character(int windowWidth, int windowHeight){
     scarfyData.rec.height = scarfy.height;
     scarfyData.rec.x = 0;
     scarfyData.rec.y = 0;
-    scarfyData.pos.x = windowDimension[0] / 2 - scarfyData.rec.width / 2;
-    scarfyData.pos.y = windowDimension[1] - scarfyData.rec.height;
+    scarfyData.pos.x = windowWidth / 2 - scarfyData.rec.width / 2;
+    scarfyData.pos.y = windowHeight - scarfyData.rec.height;
     scarfyData.frame = 0;
     scarfyData.updateTime = 1.0 / 12.0;
     scarfyData.runningTime = 0.0;
@@ -19,11 +19,38 @@ Character::~Character(){
     UnloadTexture(scarfy);
 }
 
-void Character:: Update(float )
-
-void Character::Jump(int JumVal){
-    velocity += JumVal;
+void Character:: Update(float deltaTime, bool isInAir){
+ if (!isInAir)
+    {
+        scarfyData.runningTime += deltaTime;
+        if (scarfyData.runningTime >= scarfyData.updateTime)
+        {
+            scarfyData.runningTime = 0.0f;
+            scarfyData.rec.x = scarfyData.frame * scarfyData.rec.width;
+            scarfyData.frame = (scarfyData.frame + 1) % 6;
+        }
+    }
+    
+    scarfyData.pos.y += velocity * deltaTime;
 }
 
-void Character :: Reset(int windowWidth, int windowHeight)
+void Character::Jump(int JumpVal){
+    velocity += JumpVal;
+}
+
+void Character :: Reset(int windowWidth, int windowHeight){
+        //reset player pos
+        scarfyData.pos.x = windowWidth / 2 - scarfyData.rec.width / 2;
+        scarfyData.pos.y = windowHeight - scarfyData.rec.height;
+        velocity = 0;
+}
+
+Rectangle Character:: getCollisionRec() const{
+    return {scarfyData.pos.x, scarfyData.pos.y, scarfyData.rec.width, scarfyData.rec.height};
+}
+
+bool Character:: IsOnGround(int windowHeight)const
+{
+    return scarfyData.pos.y >= windowHeight - scarfyData.rec.height;
+}
 
